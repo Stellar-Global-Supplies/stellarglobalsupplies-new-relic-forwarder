@@ -1,0 +1,66 @@
+name: Deploy New Relic Alerts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'newrelic_alerts.tf'   # only triggers when alert file changes
+  workflow_dispatch:            # allow manual trigger from GitHub UI
+
+env:
+  TF_VERSION: 1.7.5
+  AWS_REGION: us-east-1
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-alerts:
+    name: Terraform — New Relic Alerts
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. AWS credentials (needed for SSM/backend if used) ───────────────
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ── 3. Setup Terraform ────────────────────────────────────────────────
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      # ── 4. Inject New Relic API key as TF variable ────────────────────────
+      - name: Set New Relic API key
+        run: echo "TF_VAR_newrelic_api_key=${{ secrets.NR_API_KEY }}" >> $GITHUB_ENV
+
+      # ── 5. Terraform Init ─────────────────────────────────────────────────
+      - name: Terraform Init
+        run: terraform init
+
+      # ── 6. Terraform Plan — target alerts only ────────────────────────────
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -target=newrelic_nrql_alert_condition.api_gateway_completely_down \
+            -target=newrelic_nrql_alert_condition.lambda_100_percent_error_rate \
+            -target=newrelic_nrql_alert_condition.web_traffic_completely_stopped \
+            -target=newrelic_nrql_alert_condition.supabase_collector_stopped \
+            -target=newrelic_nrql_alert_condition.cost_data_pipeline_broken \
+            -target=newrelic_nrql_alert_condition.monthly_spend_exceeded_1_50 \
+            -target=newrelic_nrql_alert_condition.monthly_spend_exceeded_1_00 \
+            -out=tfplan \
+            -input=false
+
+      # ── 7. Terraform Apply — target alerts only ───────────────────────────
+      - name: Terraform Apply
+        run: terraform apply -input=false tfplan
