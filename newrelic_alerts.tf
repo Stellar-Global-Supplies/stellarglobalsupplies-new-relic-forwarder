@@ -197,12 +197,12 @@ resource "newrelic_nrql_alert_condition" "cost_data_pipeline_broken" {
   critical {
     operator              = "below_or_equals"
     threshold             = 0
-    threshold_duration    = 259200
+    threshold_duration    = 86400
     threshold_occurrences = "all"
   }
 
   fill_option        = "last_value"
-  aggregation_window = 86400
+  aggregation_window = 21600
   aggregation_method = "cadence"
   aggregation_delay  = 120
 }
@@ -234,7 +234,7 @@ resource "newrelic_nrql_alert_condition" "monthly_spend_exceeded_1_50" {
   }
 
   fill_option        = "last_value"
-  aggregation_window = 86400
+  aggregation_window = 21600
   aggregation_method = "cadence"
   aggregation_delay  = 120
 }
@@ -266,7 +266,7 @@ resource "newrelic_nrql_alert_condition" "monthly_spend_exceeded_1_00" {
   }
 
   fill_option        = "last_value"
-  aggregation_window = 86400
+  aggregation_window = 21600
   aggregation_method = "cadence"
   aggregation_delay  = 120
 }
