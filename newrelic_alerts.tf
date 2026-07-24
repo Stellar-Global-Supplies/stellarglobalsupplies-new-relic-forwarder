@@ -38,15 +38,22 @@ variable "newrelic_api_key" {
   sensitive   = true
 }
 ##############################################################################
+# New Relic — Alert Policy
+##############################################################################
+resource "newrelic_alert_policy" "main" {
+  name = "Stellar Global Supplies Monitor"
+}
+
+##############################################################################
 # New Relic — NRQL Alert Conditions
 # Account : 8314321
-# Policy  : 1719552
+# Policy  : ${newrelic_alert_policy.main.id}
 ##############################################################################
 
 # ── 1. API Gateway completely down ───────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "api_gateway_completely_down" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "API Gateway completely down"
   enabled                      = true
@@ -77,7 +84,7 @@ resource "newrelic_nrql_alert_condition" "api_gateway_completely_down" {
 # ── 2. Lambda 100% error rate ─────────────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "lambda_100_percent_error_rate" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Lambda 100% error rate"
   enabled                      = true
@@ -108,7 +115,7 @@ resource "newrelic_nrql_alert_condition" "lambda_100_percent_error_rate" {
 # ── 3. Web traffic completely stopped ────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "web_traffic_completely_stopped" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Web traffic completely stopped"
   enabled                      = true
@@ -130,16 +137,16 @@ resource "newrelic_nrql_alert_condition" "web_traffic_completely_stopped" {
     threshold_occurrences = "all"
   }
 
-  fill_option                = "last_value"
-  aggregation_window         = 1800
-  aggregation_method         = "cadence"
-  aggregation_delay          = 120
+  fill_option        = "last_value"
+  aggregation_window = 1800
+  aggregation_method = "cadence"
+  aggregation_delay  = 120
 }
 
 # ── 4. Supabase collector stopped ─────────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "supabase_collector_stopped" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Supabase collector stopped"
   enabled                      = true
@@ -171,7 +178,7 @@ resource "newrelic_nrql_alert_condition" "supabase_collector_stopped" {
 # ── 5. Cost data pipeline broken ──────────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "cost_data_pipeline_broken" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Cost data pipeline broken"
   enabled                      = true
@@ -203,7 +210,7 @@ resource "newrelic_nrql_alert_condition" "cost_data_pipeline_broken" {
 # ── 6. Monthly spend exceeded $1.50 ──────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "monthly_spend_exceeded_1_50" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Monthly AWS spend exceeded $1.50"
   enabled                      = true
@@ -235,7 +242,7 @@ resource "newrelic_nrql_alert_condition" "monthly_spend_exceeded_1_50" {
 # ── 7. Monthly spend exceeded $1.00 ──────────────────────────────────────────
 resource "newrelic_nrql_alert_condition" "monthly_spend_exceeded_1_00" {
   account_id                   = 8314321
-  policy_id                    = 1719552
+  policy_id                    = newrelic_alert_policy.main.id
   type                         = "static"
   name                         = "Monthly AWS spend exceeded $1.00"
   enabled                      = true
