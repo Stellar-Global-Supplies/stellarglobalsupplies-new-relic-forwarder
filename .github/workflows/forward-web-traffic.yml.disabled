@@ -1,8 +1,8 @@
 name: CloudFront Web Traffic → New Relic
 
 on:
-  schedule:
-    - cron: "0 */4 * * *"   # Every 4 hours
+  # schedule:
+  #   - cron: "0 */4 * * *"   # Every 4 hours
   workflow_dispatch:
 
 concurrency:
