@@ -324,14 +324,15 @@
       "total_points_tracked": 135
     },
     "daily-costs": {
-      "last_successful_push": "2026-08-02T09:58:04.095520+00:00",
-      "metric_count": 7,
+      "last_successful_push": "2026-08-02T17:00:13.753750+00:00",
+      "metric_count": 1,
       "sent_points": {
         "0d8f2b02bc5a341e0c97": "9d52949927ed",
         "0f07e5e2f4ad659f8677": "3fdb175bc6a3",
         "16a50c6e92317dd9b781": "5ae6d98b39f9",
         "1b1b58b3f5535effde18": "36d2d0fc9bbb",
         "1e0e9c5013baec4ed3d5": "04ba8912002f",
+        "1ee95404511ce5845a0e": "f0813ab5bbbf",
         "207b01e2dd4e6938d5f9": "42f264197611",
         "22136552b5568a477ce4": "dea3c1fbeedc",
         "282bceeb074267cc520a": "21a1b631ad18",
@@ -411,7 +412,7 @@
       },
       "sha256": "c9b4e4703f4ea2f18a8a54361cc90d722ceda15be6c45b65205d63be994ba8c8",
       "source_file": "daily-costs.json",
-      "total_points_tracked": 81
+      "total_points_tracked": 82
     },
     "summary": {
       "last_successful_push": "2026-08-02T09:58:04.465818+00:00",
@@ -420,5 +421,5 @@
       "source_file": "summary.json"
     }
   },
-  "updated_at": "2026-08-02T09:58:04.660988+00:00"
+  "updated_at": "2026-08-02T17:00:13.753750+00:00"
 }
